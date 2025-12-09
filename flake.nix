@@ -28,6 +28,19 @@
               ];
             };
           };
+          packages = {
+            default = derivation {
+              name = "mpsc.h";
+              version = "0.1.0";
+              system = system;
+              builder = "${pkgs.bash}/bin/bash";
+              args = [
+                "-c"
+                "${pkgs.coreutils}/bin/mkdir -p $out/include; ${pkgs.coreutils}/bin/cp ${./mpsc.h} $out/include/mpsc.h"
+              ];
+            };
+          };
+
         }
       );
     in
