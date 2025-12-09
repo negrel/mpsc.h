@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+: ${CC:=clang}
+CFLAGS="-Wall -Wextra -Wpedantic -Werror -Wnull-dereference -Wformat=2
+-Wshadow -Wsign-conversion -Wfloat-equal -Wswitch-enum -Wmissing-prototypes
+-Wdeprecated-declarations -fsanitize=undefined -fsanitize=thread -std=c11"
+LDFLAGS="-lpthread"
+
+cc() {
+	echo "CC	$@"
+	$CC $CFLAGS $LDFLAGS $@
+}
+
+execute() {
+	echo "EXEC	$@"
+	$@
+	echo "exit code $?"
+}
+
+case "${1:-test}" in
+	test)
+		cc -I. test.c -o test
+		execute valgrind timeout 5s ./test
+		;;
+
+	compile_flags.txt)
+		echo $CFLAGS | tr ' ' '\n' > compile_flags.txt
+		;;
+
+	*)
+		echo "unknown command: '${1-}'" >&2
+		exit 1
+		;;
+esac
