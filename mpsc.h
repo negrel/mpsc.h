@@ -10,9 +10,6 @@
 
 #include <stdatomic.h>
 
-#define container_of(ptr, type, member)                                        \
-	(type *)((char *)(ptr) - offsetof(type, member))
-
 /**
  * A node defined an item in the queue. It contains no data field. To store data
  * along a node, you must embed the node in your own struct and use container_of
